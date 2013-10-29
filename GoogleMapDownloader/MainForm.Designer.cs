@@ -39,6 +39,8 @@
             this.mapControl = new GMap.NET.WindowsForms.GMapControl();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.pnlR = new System.Windows.Forms.Panel();
+            this.btnLoadConfig = new System.Windows.Forms.Button();
+            this.btnContinueDownload = new System.Windows.Forms.Button();
             this.btnSaveFolder = new System.Windows.Forms.Button();
             this.txtSaveFolder = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -65,8 +67,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.关于ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnContinueDownload = new System.Windows.Forms.Button();
-            this.btnLoadConfig = new System.Windows.Forms.Button();
             this.toolbar.SuspendLayout();
             this.statusbar.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -197,6 +197,26 @@
             this.pnlR.Padding = new System.Windows.Forms.Padding(3);
             this.pnlR.Size = new System.Drawing.Size(250, 490);
             this.pnlR.TabIndex = 4;
+            // 
+            // btnLoadConfig
+            // 
+            this.btnLoadConfig.Location = new System.Drawing.Point(10, 283);
+            this.btnLoadConfig.Name = "btnLoadConfig";
+            this.btnLoadConfig.Size = new System.Drawing.Size(75, 23);
+            this.btnLoadConfig.TabIndex = 10;
+            this.btnLoadConfig.Text = "加载配置文件";
+            this.btnLoadConfig.UseVisualStyleBackColor = true;
+            this.btnLoadConfig.Click += new System.EventHandler(this.btnLoadConfig_Click);
+            // 
+            // btnContinueDownload
+            // 
+            this.btnContinueDownload.Location = new System.Drawing.Point(91, 462);
+            this.btnContinueDownload.Name = "btnContinueDownload";
+            this.btnContinueDownload.Size = new System.Drawing.Size(75, 23);
+            this.btnContinueDownload.TabIndex = 9;
+            this.btnContinueDownload.Text = "继续下载";
+            this.btnContinueDownload.UseVisualStyleBackColor = true;
+            this.btnContinueDownload.Click += new System.EventHandler(this.btnContinueDownload_Click);
             // 
             // btnSaveFolder
             // 
@@ -409,26 +429,6 @@
             this.关于ToolStripMenuItem.Name = "关于ToolStripMenuItem";
             this.关于ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.关于ToolStripMenuItem.Text = "关于";
-            // 
-            // btnContinueDownload
-            // 
-            this.btnContinueDownload.Location = new System.Drawing.Point(91, 462);
-            this.btnContinueDownload.Name = "btnContinueDownload";
-            this.btnContinueDownload.Size = new System.Drawing.Size(75, 23);
-            this.btnContinueDownload.TabIndex = 9;
-            this.btnContinueDownload.Text = "继续下载";
-            this.btnContinueDownload.UseVisualStyleBackColor = true;
-            this.btnContinueDownload.Click += new System.EventHandler(this.btnContinueDownload_Click);
-            // 
-            // btnLoadConfig
-            // 
-            this.btnLoadConfig.Location = new System.Drawing.Point(10, 283);
-            this.btnLoadConfig.Name = "btnLoadConfig";
-            this.btnLoadConfig.Size = new System.Drawing.Size(75, 23);
-            this.btnLoadConfig.TabIndex = 10;
-            this.btnLoadConfig.Text = "加载配置文件";
-            this.btnLoadConfig.UseVisualStyleBackColor = true;
-            this.btnLoadConfig.Click += new System.EventHandler(this.btnLoadConfig_Click);
             // 
             // MapDownloader
             // 

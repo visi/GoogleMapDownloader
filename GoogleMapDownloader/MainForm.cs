@@ -246,7 +246,6 @@ namespace GoogleMapDownloader
             };
             downloader.TileDownloadCompleted += TileDownloadCompleted;
             downloader.DownloadCompleted += DownloadCompleted;
-
             downloader.BeginDownload();
             statusbar_progress.Visible = true;
             statusbar_progress.Maximum = 100;

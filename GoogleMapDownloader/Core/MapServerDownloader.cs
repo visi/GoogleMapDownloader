@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace GoogleMapDownloader.Core
 {
@@ -22,6 +23,9 @@ namespace GoogleMapDownloader.Core
         protected Extent downloadExtent = null;
         protected int minDownloadZoom = 0;
         protected int maxDownloadZoom = 0;
+
+        CancellationTokenSource cts = new CancellationTokenSource();
+        protected Task task;
         protected List<Thread> threadPool = null;//线程池
         protected List<DownloadZoom> downloadQueue = new List<DownloadZoom>();//下载队列
 
@@ -30,11 +34,13 @@ namespace GoogleMapDownloader.Core
             downloadTileCount = 0;
             downloadedTileCount = 0;
 
-            threadPool = new List<Thread>(4);
-            for (int i = 0; i < 4; i++)
-            {
-                threadPool.Add(new Thread(new ThreadStart(Download)) { Name = "thread" + i.ToString() });
-            }
+            task = new Task(Download, cts.Token);
+            task.ContinueWith((Task t) => Download());
+            //threadPool = new List<Thread>(4);
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    threadPool.Add(new Thread(new ThreadStart(Download)) { Name = "thread" + i.ToString() });
+            //}
         }
 
         public MapServerDownloader(Extent downloadExtent, int minDownloadZoom, int maxDownloadZoom)
@@ -180,9 +186,10 @@ namespace GoogleMapDownloader.Core
         {
             if (CurDownloadZoom == null)
             {
-                Thread.CurrentThread.Abort();
+                cts.Cancel();
                 return;
             }
+
             CreateZoomDirectory(CurDownloadZoom.Zoom);
 
             #region 锁定下载
@@ -191,12 +198,6 @@ namespace GoogleMapDownloader.Core
 
             lock (lockObject)
             {
-                if (CurDownloadZoom == null)
-                {
-                    Thread.CurrentThread.Abort();
-                    return;
-                }
-
                 tile = new Tile(CurDownloadZoom.CurTileX, CurDownloadZoom.CurTileY, CurDownloadZoom.Zoom);
                 tile.DownloadZoom = CurDownloadZoom;
 
@@ -225,6 +226,11 @@ namespace GoogleMapDownloader.Core
             Download();
 
             #endregion
+
+            if (task.IsCompleted && CurDownloadZoom != null)
+            {
+                task.Start();
+            }
         }
 
         /// <summary>
@@ -238,10 +244,7 @@ namespace GoogleMapDownloader.Core
             downloadedTileCount = 0;
             CurDownloadZoom = downloadQueue[0];
 
-            foreach (Thread item in threadPool)
-            {
-                item.Start();
-            }
+            task.Start();
         }
 
         /// <summary>
@@ -249,10 +252,7 @@ namespace GoogleMapDownloader.Core
         /// </summary>
         public void ContinueDownload()
         {
-            foreach (Thread item in threadPool)
-            {
-                item.Start();
-            }
+            task.Start();
         }
 
         /// <summary>
@@ -260,10 +260,7 @@ namespace GoogleMapDownloader.Core
         /// </summary>
         public void StopDownload()
         {
-            foreach (Thread item in threadPool)
-            {
-                item.Abort();
-            }
+            cts.Cancel();
         }
 
         /// <summary>
@@ -295,6 +292,7 @@ namespace GoogleMapDownloader.Core
 
             if (TileDownloadCompleted != null)
             {
+
                 TileDownloadCompleted(this, tile);
                 ++downloadedTileCount;
 
